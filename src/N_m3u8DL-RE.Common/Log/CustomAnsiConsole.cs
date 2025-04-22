@@ -55,14 +55,12 @@ public static class CustomAnsiConsole
 
     public static void InitConsole(bool forceAnsi, bool noAnsiColor)
     {
+        var ansiConsoleSettings = new AnsiConsoleSettings
+        {
+            Out = new AnsiConsoleOutput(System.Console.Error)
+        };
         if (forceAnsi)
         {
-            var ansiConsoleSettings = new AnsiConsoleSettings();
-            if (noAnsiColor)
-            {
-                ansiConsoleSettings.Out = new AnsiConsoleOutput(new NonAnsiWriter());
-            }
-
             ansiConsoleSettings.Interactive = InteractionSupport.Yes;
             ansiConsoleSettings.Ansi = AnsiSupport.Yes;
             Console = AnsiConsole.Create(ansiConsoleSettings);
@@ -70,11 +68,6 @@ public static class CustomAnsiConsole
         }
         else
         {
-            var ansiConsoleSettings = new AnsiConsoleSettings();
-            if (noAnsiColor)
-            {
-                ansiConsoleSettings.Out = new AnsiConsoleOutput(new NonAnsiWriter());
-            }
             Console = AnsiConsole.Create(ansiConsoleSettings);
         }
     }

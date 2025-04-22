@@ -92,7 +92,7 @@ internal class Program
         {
             option.ForceAnsiConsole = true;
             option.NoAnsiColor = true;
-            Logger.Info(ResString.consoleRedirected);
+            //Logger.Info(ResString.consoleRedirected);
         }
         CustomAnsiConsole.InitConsole(option.ForceAnsiConsole, option.NoAnsiColor);
         
@@ -371,8 +371,8 @@ internal class Program
         }
 
 #if DEBUG
-        Console.WriteLine("Press any key to continue...");
-        Console.ReadKey();
+        Console.Error.WriteLine("Press any key to continue...");
+        //Console.ReadKey();
 #endif
 
         Logger.InfoMarkUp(ResString.saveName + $"[deepskyblue1]{option.SaveName.EscapeMarkup()}[/]");

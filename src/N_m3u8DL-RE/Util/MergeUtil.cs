@@ -14,27 +14,59 @@ internal static class MergeUtil
     /// </summary>
     /// <param name="files"></param>
     /// <param name="outputFilePath"></param>
-    public static void CombineMultipleFilesIntoSingleFile(string[] files, string outputFilePath)
+    public static void CombineMultipleFilesIntoSingleFile(string[] files, string? outputFilePath)
     {
-        if (files.Length == 0) return;
-        if (files.Length == 1)
-        {
-            FileInfo fi = new FileInfo(files[0]);
-            fi.CopyTo(outputFilePath, true);
+        if (files == null || files.Length == 0) {
             return;
         }
 
-        if (!Directory.Exists(Path.GetDirectoryName(outputFilePath)))
-            Directory.CreateDirectory(Path.GetDirectoryName(outputFilePath)!);
+        Stream? outputStream = null;
+        bool closeOutputStream = true;
 
-        var inputFilePaths = files;
-        using var outputStream = File.Create(outputFilePath);
-        foreach (var inputFilePath in inputFilePaths)
+        try {
+            if (outputFilePath != null) {
+                string? outputDirectory = Path.GetDirectoryName(outputFilePath);
+                if (!string.IsNullOrEmpty(outputDirectory) && !Directory.Exists(outputDirectory)) {
+                    Directory.CreateDirectory(outputDirectory);
+                }
+                outputStream = File.Create(outputFilePath);
+            } else {
+                outputStream = Console.OpenStandardOutput();
+                closeOutputStream = false;
+            }
+
+            foreach (var inputFilePath in files) {
+                if (string.IsNullOrEmpty(inputFilePath)) { 
+                    continue;
+                }
+
+                try
+                {
+                    using var inputStream = File.OpenRead(inputFilePath);
+                    inputStream.CopyTo(outputStream);
+                }
+                catch (FileNotFoundException)
+                {
+                    throw; // Uncomment to make missing files an error
+                }
+                catch (IOException)
+                {
+                    throw; // Propagate unexpected IO errors
+                }
+                 catch (UnauthorizedAccessException)
+                {
+                    throw; // Propagate access errors
+                }
+            }
+
+            outputStream.Flush();
+        }
+        finally
         {
-            if (inputFilePath == "")
-                continue;
-            using var inputStream = File.OpenRead(inputFilePath);
-            inputStream.CopyTo(outputStream);
+            if (outputStream != null && closeOutputStream)
+            {
+                outputStream.Dispose();
+            }
         }
     }
 

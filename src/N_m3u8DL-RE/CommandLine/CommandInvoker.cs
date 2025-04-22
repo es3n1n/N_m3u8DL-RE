@@ -65,6 +65,7 @@ internal static partial class CommandInvoker
     private static readonly Option<string?> BaseUrl = new(["--base-url"], description: ResString.cmd_baseUrl);
     private static readonly Option<bool> ConcurrentDownload = new(["-mt", "--concurrent-download"], description: ResString.cmd_concurrentDownload, getDefaultValue: () => false);
     private static readonly Option<bool> NoLog = new(["--no-log"], description: ResString.cmd_noLog, getDefaultValue: () => false);
+    private static readonly Option<bool> ToStdout = new(["--to-stdout"], description: "download to stdout", getDefaultValue: () => false);
     private static readonly Option<bool> AllowHlsMultiExtMap = new(["--allow-hls-multi-ext-map"], description: ResString.cmd_allowHlsMultiExtMap, getDefaultValue: () => false);
     private static readonly Option<string[]?> AdKeywords = new(["--ad-keyword"], description: ResString.cmd_adKeyword) { ArgumentHelpName = "REG" };
     private static readonly Option<long?> MaxSpeed = new(["-R", "--max-speed"], description: ResString.cmd_maxSpeed, parseArgument: ParseSpeedLimit) { ArgumentHelpName = "SPEED" };
@@ -580,6 +581,7 @@ internal static partial class CommandInvoker
                 LiveTakeCount = bindingContext.ParseResult.GetValueForOption(LiveTakeCount),
                 NoDateInfo = bindingContext.ParseResult.GetValueForOption(NoDateInfo),
                 NoLog = bindingContext.ParseResult.GetValueForOption(NoLog),
+                ToStdout = bindingContext.ParseResult.GetValueForOption(ToStdout),
                 AllowHlsMultiExtMap = bindingContext.ParseResult.GetValueForOption(AllowHlsMultiExtMap),
                 AdKeywords = bindingContext.ParseResult.GetValueForOption(AdKeywords),
                 MaxSpeed = bindingContext.ParseResult.GetValueForOption(MaxSpeed),
@@ -640,7 +642,7 @@ internal static partial class CommandInvoker
         var rootCommand = new RootCommand(VERSION_INFO)
         {
             Input, TmpDir, SaveDir, SaveName, LogFilePath, BaseUrl, ThreadCount, DownloadRetryCount, HttpRequestTimeout, ForceAnsiConsole, NoAnsiColor,AutoSelect, SkipMerge, SkipDownload, CheckSegmentsCount,
-            BinaryMerge, UseFFmpegConcatDemuxer, DelAfterDone, NoDateInfo, NoLog, WriteMetaJson, AppendUrlParams, ConcurrentDownload, Headers, /**SavePattern,**/ SubOnly, SubtitleFormat, AutoSubtitleFix,
+            BinaryMerge, UseFFmpegConcatDemuxer, DelAfterDone, NoDateInfo, NoLog, ToStdout, WriteMetaJson, AppendUrlParams, ConcurrentDownload, Headers, /**SavePattern,**/ SubOnly, SubtitleFormat, AutoSubtitleFix,
             FFmpegBinaryPath,
             LogLevel, UILanguage, UrlProcessorArgs, Keys, KeyTextFile, DecryptionEngine, DecryptionBinaryPath, UseShakaPackager, MP4RealTimeDecryption,
             MaxSpeed,

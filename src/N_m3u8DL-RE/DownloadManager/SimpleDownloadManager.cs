@@ -540,7 +540,7 @@ internal class SimpleDownloadManager
             {
                 Logger.InfoMarkUp(ResString.binaryMerge);
                 var files = FileDic.OrderBy(s => s.Key.Index).Select(s => s.Value).Select(v => v!.ActualFilePath).ToArray();
-                MergeUtil.CombineMultipleFilesIntoSingleFile(files, output);
+                MergeUtil.CombineMultipleFilesIntoSingleFile(files, DownloaderConfig.MyOptions.ToStdout ? null : output);
                 mergeSuccess = true;
             }
             else

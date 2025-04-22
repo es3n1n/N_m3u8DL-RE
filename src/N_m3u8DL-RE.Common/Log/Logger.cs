@@ -27,6 +27,8 @@ public static partial class Logger
     // 读写锁
     static ReaderWriterLockSlim LogWriteLock = new ReaderWriterLockSlim();
 
+    public static TextWriter ErrorWriter = Console.Error;
+
     public static void InitLogFile()
     {
         if (!IsWriteFile) return;
@@ -81,7 +83,7 @@ public static partial class Logger
             else
             {
                 CustomAnsiConsole.Markup(write);
-                Console.WriteLine(subWrite);
+                ErrorWriter.WriteLine(subWrite);
             }
 
             if (!IsWriteFile || !File.Exists(LogFilePath)) return;
