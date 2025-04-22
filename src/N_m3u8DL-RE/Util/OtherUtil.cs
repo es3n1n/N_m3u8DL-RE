@@ -44,8 +44,12 @@ internal static partial class OtherUtil
     /// <returns></returns>
     public static string GetFileNameFromInput(string input, bool addSuffix = true)
     {
-        var saveName = addSuffix ? DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") : string.Empty;
-        if (File.Exists(input))
+        var saveName = addSuffix ? DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-ff") : string.Empty;
+        if (input == "-")
+        {
+            saveName = "stdout_" + saveName;
+        }
+        else if (File.Exists(input))
         {
             saveName = Path.GetFileNameWithoutExtension(input) + "_" + saveName;
         }

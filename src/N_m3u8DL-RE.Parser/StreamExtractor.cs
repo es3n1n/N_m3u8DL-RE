@@ -28,7 +28,12 @@ public class StreamExtractor
     public async Task LoadSourceFromUrlAsync(string url)
     {
         Logger.Info(ResString.loadingUrl + url);
-        if (url.StartsWith("file:"))
+        if (url == "-") 
+        {
+            this.rawText = Console.In.ReadToEnd();    
+            parserConfig.OriginalUrl = parserConfig.Url = url;
+        }
+        else if (url.StartsWith("file:"))
         {
             var uri = new Uri(url);
             this.rawText = await File.ReadAllTextAsync(uri.LocalPath);

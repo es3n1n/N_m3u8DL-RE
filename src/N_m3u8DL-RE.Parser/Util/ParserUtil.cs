@@ -102,7 +102,7 @@ public static partial class ParserUtil
     /// <returns></returns>
     public static string CombineURL(string baseurl, string url)
     {
-        if (string.IsNullOrEmpty(baseurl))
+        if (string.IsNullOrEmpty(baseurl) || baseurl == "-")
             return url;
 
         var uri1 = new Uri(baseurl);  // 这里直接传完整的URL即可
